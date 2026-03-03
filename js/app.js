@@ -222,6 +222,7 @@
       var edges = simResult.mstEdges;
       var total = simResult.totalDist;
       var mstPath = state.optPath;
+      var agvSpeed = 1.2;
 
       log('🌐 MST COMPLETO — ' + edges.length + ' aristas, ' + total + 'm', algo === 'prim' ? 'le-mst' : 'le-kruskal');
       edges.forEach(function (e) { log('   ' + e[0] + ' — ' + e[1] + ': ' + e[2] + 'm', 'le-info'); });
@@ -245,7 +246,9 @@
           var edge = edges.find(function (a) { return (a[0] === u && a[1] === v) || (a[0] === v && a[1] === u); });
           if (edge) pathDist += edge[2];
         }
-        if (rbDist) rbDist.innerHTML = 'Distancia en MST: <span>' + pathDist + 'm</span>';
+        var pathTime = (pathDist / agvSpeed).toFixed(1);
+        log('⏱  Tiempo AGV (1.2m/s): ' + pathTime + 's', 'le-path');
+        if (rbDist) rbDist.innerHTML = 'Distancia en MST: <span>' + pathDist + 'm</span> | Tiempo: ' + pathTime + 's';
         if (mDist) mDist.textContent = pathDist;
       } else {
         var mDistEl = document.getElementById('mDist');
@@ -259,7 +262,9 @@
         if (resultBanner2) resultBanner2.style.display = 'block';
         if (rbTitle2) rbTitle2.textContent = algo === 'prim' ? '🟣 MST — PRIM' : '🟦 MST — KRUSKAL';
         if (rbPath2) rbPath2.textContent = edges.map(function (e) { return e[0] + '—' + e[1] + '(' + e[2] + 'm)'; }).join(' · ');
-        if (rbDist2) rbDist2.innerHTML = 'Costo total MST: <span>' + total + 'm</span>';
+        var mstTime = (total / agvSpeed).toFixed(1);
+        log('⏱  Tiempo AGV (1.2m/s): ' + mstTime + 's', 'le-path');
+        if (rbDist2) rbDist2.innerHTML = 'Costo total MST: <span>' + total + 'm</span> | Tiempo: ' + mstTime + 's';
       }
     } else {
       if (simResult.path && simResult.totalDist != null) {
